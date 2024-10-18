@@ -1,0 +1,33 @@
+pipeline:
+  #type: chain
+  transforms:
+    - type: ReadFromCsv
+      name: FirstInput
+      config:
+        path: D:\\Programs\\Apache-Beam-YAML\\Datasets\\sample.csv
+    - type: ReadFromCsv
+      name: SecondInput 
+      config:
+        path: D:\\Programs\\Apache-Beam-YAML\\Datasets\\sample2.csv
+
+    - type: Join
+      name: transformation
+      input:
+        input1: FirstInput
+        input2: SecondInput
+      config:
+        type: inner
+        equalities:
+          - input1: num4
+            input2: col2
+    
+    - type: LogForTesting
+      input: transformation
+
+    - type: WriteToCsv
+      input: transformation
+      config:
+        path: D:\\Programs\\Apache-Beam-YAML\\Outputs\\join_output.csv
+
+
+

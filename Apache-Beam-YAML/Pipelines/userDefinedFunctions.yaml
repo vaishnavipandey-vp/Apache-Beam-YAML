@@ -1,0 +1,23 @@
+pipeline:
+  type: chain
+  transforms:
+    - type: ReadFromCsv
+      config:
+        path: D:/Programs/Apache-Beam-YAML/Datasets/sample.csv
+
+    - type: MapToFields
+      name: transformation
+      config:
+        language: python
+        fields:
+          new_col:
+            callable: |
+              import re
+              def my_mapping(row):
+                if re.match("[0-9]+", str(row.num1)) and row.num2 > 0:
+                  return "good"
+                else:
+                  return "bad"
+            output_type: string
+
+    - type: LogForTesting

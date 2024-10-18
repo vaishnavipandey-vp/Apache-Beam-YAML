@@ -1,0 +1,71 @@
+pipeline:
+  type: chain
+  transforms:
+    - type: ReadFromCsv
+      config:
+        path: D:\\Programs\\Beam-Apache-YAML\\Datasets\\test.csv
+    - type: MapToFields
+      config:
+        language: python
+        fields:
+          new_col:
+            callable: |
+              import pandas as pd
+
+              # this prints column no with row wise values -
+
+              # def process(element):
+              #   df = pd.DataFrame(element)
+              #   for col in df.columns:
+              #     print("Column:", col)
+              #     for i, val in enumerate(df[col]):
+              #       print(f"Row {i}: {val}")
+              #     print()
+
+              # this calculates mean row-wise -
+
+              # def calculate_mean(element):
+              #   df = pd.DataFrame(element)
+              #   for col in df.columns:
+              #     print("Column:", col)
+              #     print("Mean:", df[col].mean())
+              #     print()
+
+              # this prints column 1 -
+
+              # def calculate_mean(element):
+              #   df = pd.DataFrame(element)
+              #   for col in df.columns:
+              #     print("Column:", col)
+              #     print("value:", df.loc[0, col])
+              #     print()
+    
+              # trying to cal mean col wise -
+
+              def calculate_mean(element):
+                df = pd.DataFrame(element)
+                mean_list = []
+                sum = 0
+                for x in range(0, 9):
+                  for col in df.columns:
+                    sum += df.loc[x, col]
+                    mean_value = sum/10
+                  mean_list.append(mean_value)
+                  sum = 0
+                print(mean_list)
+
+
+              # def calculate_mean(element):
+              #   df = pd.DataFrame(element)
+              #   mean_list = []
+              #   for col in df.columns:
+              #       mean_list.append(df.loc[0, col])
+              #   #print(mean_list)
+              #   sum_of_elements = sum(mean_list)
+              #   print(sum_of_elements)
+
+                
+                # add = []
+                # for x in range(0,9):
+                #   add += mean_list
+                # print(add)

@@ -1,0 +1,36 @@
+pipeline:
+  #type: chain
+  transforms:
+    - type: ReadFromCsv
+      config:
+        path: D:/Programs/Apache-Beam-YAML/Datasets/sample.csv
+        
+
+    - type: PyTransform
+      name: transformation
+      input: ReadFromCsv
+      config:
+        constructor: __constructor__
+        kwargs:
+          source: |
+            class MyPTransform(beam.PTransform):
+              def __init__(self, inc):
+                self._inc = inc
+              def expand(self, pcoll):
+                return pcoll | beam.Map(lambda x: beam.Row(a=x.num2 + self._inc)) 
+                    
+          inc: 10
+# For each element x in the input PCollection, it creates a new beam.Row with a field 'a' 
+# that is the sum of x.col2 (the value of column col2 in the input data) and self._inc 
+# (the increment value passed during initialization).
+
+    
+    - type: LogForTesting
+      input: transformation
+
+    # - type: WriteToJson
+    #   input: transformation
+    #   config:
+    #     path: D:/Programs/Apache-Beam-YAML/Outputs/debug_output.json
+
+

@@ -1,0 +1,23 @@
+pipeline:
+  type: chain
+  transforms:
+    - type: ReadFromCsv
+      config:
+        path: D:/Programs/Apache-Beam-YAML/Datasets/sample.csv
+        
+
+    - type: PyTransform
+      config:
+        constructor: __callable__
+        kwargs:
+          source: |
+            def my_ptransform(pcoll, inc):
+              return pcoll | beam.Map(lambda x: beam.Row(a=x.num2 + inc))
+          inc: 10
+  
+    - type: LogForTesting
+
+    - type: WriteToJson
+      config:
+        path: D:/Programs/Apache-Beam-YAML/Outputs/callable_output.json
+

@@ -1,0 +1,26 @@
+pipeline:
+  type: chain
+  transforms:
+    - type: ReadFromCsv
+      name: ReadMyData
+      config:
+        path: D:\\Programs\\Apache-Beam-YAML\\Datasets\\sample.csv
+
+    - type: Filter
+      config:
+        language: python
+        keep: "count_db > 4000"
+
+    - type: Sql
+      config:
+        query: "select * from PCOLLECTION"
+    
+    - type: LogForTesting
+    
+    - type: WriteToCsv
+      config:
+        path: D:\\Programs\\Apache-Beam-YAML\\Outputs\\sql_output.csv
+
+    # - type: WriteToJson
+    #   config:
+    #     path: D:\\Programs\\Apache-Beam-YAML\\Outputs\\sql_output.json

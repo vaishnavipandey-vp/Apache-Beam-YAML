@@ -1,0 +1,15 @@
+pipeline:
+  transforms:
+    - type: Create
+      config:
+        elements: [1, 2, 3]
+    - type: LogForTesting
+      input: Create
+
+    - type: WriteToCsv  
+      config:
+        path: D:\Programs\Apache-Beam-YAML\Outputs\output.csv  
+      input: LogForTesting 
+
+
+# python -m apache_beam.yaml.main --yaml_pipeline_file=pipeline.yaml

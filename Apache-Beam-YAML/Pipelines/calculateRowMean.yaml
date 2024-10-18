@@ -1,0 +1,26 @@
+pipeline:
+  type: chain
+  transforms:
+    - type: ReadFromCsv
+      config:
+        path: D:\\Programs\\Beam-Apache-YAML\\Datasets\\test.csv
+    - type: MapToFields
+      config:
+        language: python
+        fields:
+          new_col:
+            callable: |              
+
+              def replace_missing(row):
+                valid_values = [x for x in row if x not in ['', None]]
+                mean_value = sum(valid_values)/ len(valid_values) if valid_values else 0
+                return [x if x not in ['', None] else mean_value for x in row]  
+
+    - type: LogForTesting
+      #input: abc          
+
+    - type: WriteToCsv
+      config:
+        header: "Pregnancies,Glucose,BloodPressure,SkinThickness,Insulin,BMI,DiabetesPedigreeFunction,Age,Outcome"
+        path: D:\\Programs\\Beam-Apache-YAML\\Outputs\\project02_output.csv
+        

@@ -1,0 +1,44 @@
+pipeline:
+  #type: chain
+  transforms:
+    - type: ReadFromCsv
+      config:
+        path: D:/Programs/Apache-Beam-YAML/Datasets/sample.csv
+        
+
+    - type: PyTransform
+      name: transformation
+      input: ReadFromCsv
+      config:
+        constructor: __constructor__
+        kwargs:
+          source: |
+            import apache_beam as beam            
+            def create_my_transform(inc):            
+              return beam.Map(lambda x: beam.Row(a=x.num2 + inc))    
+          inc: 10
+    
+    - type: LogForTesting
+      input: transformation
+
+    - type: WriteToJson
+      input: transformation
+      config:
+        path: D:/Programs/Apache-Beam-YAML/Outputs/debug_output.json
+
+    - type: WriteToText
+      input: transformation
+      config:
+        path: D:/Programs/Apache-Beam-YAML/Outputs/debug_output.txt
+
+
+    # - type: WriteToCsv
+    #   input: transformation
+    #   config:
+    #     path: D:/Programs/Beam-Apache-YAML/constructor_output.csv
+    #     schema: 
+    #         fields:
+    #           - name: a
+    #             type: INT64  # Define the type for the field
+    #     header: ['a']  # Specify the header if necessary
+

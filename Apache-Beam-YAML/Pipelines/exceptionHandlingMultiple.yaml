@@ -1,0 +1,47 @@
+pipeline:
+  transforms:
+    - type: ReadFromCsv
+      config:
+        path: D:/Programs/Apache-Beam-YAML/Datasets/sample.csv
+
+    - type: MapToFields
+      name: ComputeRatio
+      input: ReadFromCsv
+      config:
+        language: python
+        fields:
+          num1: num1
+          # This could raise a divide-by-zero error.
+          ratio: num1 / num2
+        error_handling:
+          output: my_error_output
+
+    - type: MapToFields
+      name: ComputeRatioForBadRecords
+      input: ComputeRatio.my_error_output
+      config:
+        language: python
+        fields:
+          num1: num1
+          ratio: num1 / (num2 + 1)
+        error_handling:
+          output: still_bad_output
+
+    - type: WriteToJson
+      # Takes as input everything from the "success" path of both transforms.
+      input: [ComputeRatio, ComputeRatioForBadRecords]
+      config:
+        path: D:/Programs/Apache-Beam-YAML/Outputs/valid_output2.json
+
+    - type: WriteToJson
+      name: WriteErrorsToJson
+      # These failed the first and the second transform.
+      input: ComputeRatioForBadRecords.still_bad_output
+      config:
+        path: D:/Programs/Apache-Beam-YAML/Outputs/still_bad_output.json
+
+    - type: WriteToJson
+      name: WriteErrorsToJson
+      input: ComputeRatio.my_error_output
+      config:
+        path: D:/Programs/Apache-Beam-YAML/Outputs/err1_output.json

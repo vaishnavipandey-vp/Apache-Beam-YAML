@@ -1,0 +1,29 @@
+pipeline:
+  transforms:
+    - type: ReadFromCsv
+      config:
+        path: D:/Programs/Apache-Beam-YAML/Datasets/sample.csv
+
+    - type: MapToFields
+      input: ReadFromCsv
+      config:
+        language: python
+        fields:
+          num1: num1
+          num2: num2
+          # This could raise a divide-by-zero error.
+          ratio: num1 / num2
+        error_handling:
+          output: my_error_output
+          #threshold: 0.1
+
+    - type: WriteToJson
+      input: MapToFields
+      config:
+        path: D:/Programs/Apache-Beam-YAML/Outputs/valid_output.json
+
+    - type: WriteToJson
+      name: WriteErrorsToJson
+      input: MapToFields.my_error_output
+      config:
+        path: D:/Programs/Apache-Beam-YAML/Outputs/err_output.json

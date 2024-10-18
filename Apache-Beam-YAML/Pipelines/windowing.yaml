@@ -1,0 +1,55 @@
+# pipeline:
+#   type: chain
+#   transforms:
+#     - type: ReadFromCsv
+#       config:
+#         path: D:\Programs\Beam-Apache-YAML\sample.csv
+#     - type: WriteToJson
+#       config:
+#         path: D:\Programs\Beam-Apache-YAML\output5.json
+#       input: ReadFromCsv
+
+#     - type: WindowInto
+#       windowing:
+#         type: fixed
+#         size: 5s
+#     - type: SomeGroupingTransform
+#       config:
+#         arg: ...
+#     - type: WriteToPubSub
+#       config:
+#         topic: anotherPubSubTopic
+#         format: JSON
+# options:
+#   streaming: true
+
+
+pipeline:
+  type: chain
+  transforms:
+    - type: ReadFromPubSub
+      
+      config:
+        topic: projects/rosy-phalanx-354715/topics/myPubSubTopic
+        format: JSON
+        schema:
+          type: object
+          properties:
+            col1: {type: string}
+            col2: {type: integer}
+            col3: {type: number}
+    - type: WindowInto
+      windowing:
+        type: fixed
+        size: 60s
+
+    - type: WriteToPubSub
+      config:
+        topic: D:\Programs\Beam-Apache-YAML\out_test
+        format: JSON
+options:
+  streaming: true
+  project: myproject-yaml
+  region: your-region
+  runner: DirectRunner  # Or DataflowRunner for cloud execution
+  temp_location: gs://your-bucket/temp  # Needed only for DataflowRunner

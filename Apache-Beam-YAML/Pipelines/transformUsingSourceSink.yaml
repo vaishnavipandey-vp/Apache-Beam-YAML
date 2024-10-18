@@ -1,0 +1,26 @@
+pipeline:
+  source:
+    - type: ReadFromCsv
+      name: ReadMyData #Named transforms
+      config:
+        path: D:\\Programs\\Apache-Beam-YAML\\Datasets\\sample.csv
+
+  transforms:
+    - type: Filter
+      config:
+        language: python
+        keep: "count_db > 4000"
+      input: ReadFromCsv
+
+    - type: Sql
+      config:
+        query: "select * from PCOLLECTION"
+      input: Filter
+   
+  sink:
+    - type: WriteToJson
+      config:
+        path: D:\\Programs\\Apache-Beam-YAML\\Outputs\\sql_output.json
+      input: Sql
+
+

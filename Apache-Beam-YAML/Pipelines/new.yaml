@@ -1,0 +1,24 @@
+pipeline:
+  transforms:
+    - type: ReadFromCsv
+      config:
+        path: D:\Programs\Apache-Beam-YAML\Datasets\sample.csv
+      output: CsvOutput
+
+    - type: ReadSqlFromFile
+      config:
+        language: sql
+        path: D:\Programs\Apache-Beam-YAML\Datasets\new.sql
+      input: CsvOutput
+
+    - type: ExecuteSql
+      config:
+        sql_output: SqlOutput  # Reference output from the ReadSqlFromFile transform
+      output: ExecutedSqlOutput
+
+    - type: WriteToJson
+      config:
+        path: D:\Programs\Apache-Beam-YAML\Outputs\output5.json
+      input: ReadFromSql
+
+

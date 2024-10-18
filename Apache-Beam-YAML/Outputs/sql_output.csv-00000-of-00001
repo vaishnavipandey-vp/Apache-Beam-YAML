@@ -1,0 +1,5 @@
+report_name,nps_paas,nps_saas,count_db,num1,num2,num3,num4
+ci01,10sec,11sec,4395.3,394,853,0,Q
+ci25_definiteQuote,5sec,7sec,4987.0,954,3673,98,J
+ci25_phtFunnelDetail,18sec,18sec,5578.7,46,743,A,Z
+ci25_phtFunnelSumm,15sec,15sec,6170.4,843,349,#,M
