@@ -42,30 +42,14 @@ pipeline:
     
               # trying to cal mean col wise -
 
-              def calculate_mean(element):
-                df = pd.DataFrame(element)
-                mean_list = []
-                sum = 0
-                for x in range(0, 9):
-                  for col in df.columns:
-                    sum += df.loc[x, col]
-                    mean_value = sum/10
-                  mean_list.append(mean_value)
-                  sum = 0
-                print(mean_list)
-
-
               # def calculate_mean(element):
-              #   df = pd.DataFrame(element)
-              #   mean_list = []
+              #  df = pd.DataFrame(element)
+              # mean_list = []
+              #  sum = 0
+              #  for x in range(0, 9):
               #   for col in df.columns:
-              #       mean_list.append(df.loc[0, col])
-              #   #print(mean_list)
-              #   sum_of_elements = sum(mean_list)
-              #   print(sum_of_elements)
-
-                
-                # add = []
-                # for x in range(0,9):
-                #   add += mean_list
-                # print(add)
+              #     sum += df.loc[x, col]
+              #     mean_value = sum/10
+              #   mean_list.append(mean_value)
+              #   sum = 0
+              # print(mean_list)
