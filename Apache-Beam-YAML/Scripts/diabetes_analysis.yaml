@@ -1,0 +1,22 @@
+pipeline:
+  type: chain
+  transforms:
+    - type: ReadFromCsv
+      name: out001
+      config:
+        path: D:/Programs/Apache-Beam-YAML/Datasets/diabetes_data.csv
+    - type: MapToFields
+      config:
+        language: python
+        fields:
+          anotherCol:
+            callable: |
+              import numpy as np
+              def my_mapping(row):                  
+                if row.Pregnancies not in (None, '') and row.Glucose not in (None, '') and row.BloodPressure not in (None, '') and row.SkinThickness not in (None, '') and row.Insulin not in (None, '') and row.BMI not in (None, '') and row.DiabetesPedigreeFunction not in (None, '') and row.Age not in (None, '') and row.Outcome not in (None, ''):
+                  return (row.Pregnancies, row.Glucose, row.BloodPressure, row.SkinThickness, row.Insulin, row.BMI, row.DiabetesPedigreeFunction, row.Age, row.Outcome)
+
+    - type: WriteToCsv
+      config:
+        path: D:/Programs/Apache-Beam-YAML/Outputs/handled_missing_diabetes_data.csv.csv
+
